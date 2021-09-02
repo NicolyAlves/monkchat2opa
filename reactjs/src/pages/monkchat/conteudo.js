@@ -8,6 +8,9 @@ import { ChatButton, ChatInput, ChatTextArea } from '../../components/outros/inp
 
 import { useState, useRef } from 'react';
 
+import Cookies from 'js-cookie'
+import { useHistory } from 'react-router-dom';
+
 import Api from '../../service/api';
 const api = new Api();
 
@@ -19,6 +22,12 @@ export default function Conteudo() {
     const [msg, setMsg] = useState('')
 
     const loading = useRef(null);
+
+    const navigation = useHistory();
+
+    let usuarioLogado = Cookies.get('usuario-logado');
+    if (usuarioLogado == null)
+    navigation.push('/')
 
 
     const validarResposta = (resp) => {
@@ -40,9 +49,13 @@ export default function Conteudo() {
         loading.current.complete();
     }
 
-    const enviarMensagem = async () => {
+    const enviarMensagem = async (event) => {
+        
+        if  (event.type === "keypress" && (!event.ctrlKey || event.charCode !== 13))
+        return;
+
         const resp = await api.inserirMensagem(sala, usu, msg);
-        if (!validarResposta(resp)) 
+        if(!validarResposta(resp)) 
             return;
         
         toast.dark('💕 Mensagem enviada com sucesso!');
@@ -67,6 +80,15 @@ export default function Conteudo() {
         await carregarMensagens();
     }
     
+    const remover = async (id) => {
+    const r = await api.removerMensagem(id)       
+    if (!validarResposta(r)) 
+    return;
+
+    toast.dark('💕 Sala cadastrada!');
+    await carregarMensagens();
+    }
+
     return (
         <ContainerConteudo>
             <ToastContainer />
@@ -103,6 +125,7 @@ export default function Conteudo() {
                     {chat.map(x =>
                         <div key={x.id_chat}>
                             <div className="chat-message">
+                                <div><img onClick={() => remover(x.id_chat) } src="/assets/images/bin_delete_recycle_remove_trash_icon_123296 (1).svg" alt=' ' style={{cursor: 'pointer'}}/></div>
                                 <div>({new Date(x.dt_mensagem.replace('Z', '')).toLocaleTimeString()})</div>
                                 <div><b>{x.tb_usuario.nm_usuario}</b> fala para <b>Todos</b>:</div>
                                 <div> {x.ds_mensagem} </div>
