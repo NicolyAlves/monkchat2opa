@@ -43,7 +43,7 @@ export default class Api {
         return r.data;
     }
 
-    async alterarMensagem(id, msg) {
+    async alterarMensagem(id, msg) { // 03/09
         let r = await api.put(`/cht/${id}`, {mensagem: msg})
         return r.data;
     }
