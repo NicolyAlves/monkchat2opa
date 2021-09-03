@@ -16,6 +16,7 @@ const api = new Api();
 
 
 export default function Conteudo() {
+    const [IdAlterando, setIdAlterando] = useState(0); // usestate 030/09 
     const [chat, setChat] = useState([]);
     const [sala, setSala] = useState('');
     const [usu, setUsu] = useState('');
