@@ -99,7 +99,7 @@ export default function Conteudo() {
     await carregarMensagens();
     }
 
-    const editar = async (item) => { // funcao 030/9
+    async function editar (item)  { 
         setMsg(item.ds_mensagem);
         setIdAlterando(item.id_chat);
     }
