@@ -39,7 +39,7 @@ export default class Api {
     }
 
     async removerMensagem(id) {
-        let r = await api.delete('/chat/${id}');
+        let r = await api.delete(`/chat/${id}`);
         return r.data;
     }
 
