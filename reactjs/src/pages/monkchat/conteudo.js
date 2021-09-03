@@ -16,7 +16,7 @@ const api = new Api();
 
 
 export default function Conteudo() {
-    const [IdAlterando, setIdAlterando] = useState(0); // usestate 030/09 
+    const [idAlterando, setIdAlterando] = useState(0); // usestate 030/09 
     const [chat, setChat] = useState([]);
     const [sala, setSala] = useState('');
     const [usu, setUsu] = useState('');
@@ -32,8 +32,6 @@ export default function Conteudo() {
 
 
     const validarResposta = (resp) => {
-        //console.log(resp);
-
         if (!resp.erro)
             return true;
         toast.error(`${resp.erro}`);
@@ -50,16 +48,27 @@ export default function Conteudo() {
         loading.current.complete();
     }
 
-    const enviarMensagem = async (event) => {
+    const enviarMensagem = async (event) => { // /atualizado enviar
         
         if  (event.type === "keypress" && (!event.ctrlKey || event.charCode !== 13))
         return;
 
+        if (idAlterando > 0) {
+            const resp = await api.alterarMensagem(idAlterando, msg);
+            if (!validarResposta(resp))
+            return;
+
+            toast.dark("💕 Mensagem altearda com sucesso!");
+            setIdAlterando(0);
+            setMsg('');
+
+        } else {
         const resp = await api.inserirMensagem(sala, usu, msg);
         if(!validarResposta(resp)) 
             return;
         
         toast.dark('💕 Mensagem enviada com sucesso!');
+        }
         await carregarMensagens();
     }
 
@@ -90,7 +99,7 @@ export default function Conteudo() {
     await carregarMensagens();
     }
 
-    async function editar(item) {
+    const editar = async (item) => { // funcao 030/9
         setMsg(item.ds_mensagem);
         setIdAlterando(item.id_chat);
     }
