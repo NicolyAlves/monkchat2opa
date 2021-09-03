@@ -43,4 +43,9 @@ export default class Api {
         return r.data;
     }
 
+    async alterarMensagem(id, msg) {
+        let r = await api.put(`/cht/${id}`, {mensagem: msg})
+        return r.data;
+    }
+
 }
