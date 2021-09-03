@@ -89,6 +89,11 @@ export default function Conteudo() {
     await carregarMensagens();
     }
 
+    async function editar(item) {
+        setMsg(item.ds_mensagem);
+        setIdAlterando(item.id_chat);
+    }
+
     return (
         <ContainerConteudo>
             <ToastContainer />
